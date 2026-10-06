@@ -3,563 +3,661 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krishna Raipuria — Android Developer</title>
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#15171B">
+<title>Krishna Raipuria — Backend & Android Developer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  /* Apply saved theme before first paint to avoid a flash. Default is dark. */
+  (function(){
+    try{
+      var saved = localStorage.getItem('kr-theme');
+      if(saved === 'light'){ document.documentElement.setAttribute('data-theme','light'); }
+    }catch(e){}
+  })();
+</script>
 <style>
   :root{
-    --bg:#0B0F0D;
-    --surface:#121815;
-    --surface-2:#171F1B;
-    --border:#26312B;
-    --green:#3DDC84;
-    --green-dim:#2BAF68;
-    --amber:#F2B138;
-    --text:#E7EDE9;
-    --text-dim:#8FA098;
-    --radius:14px;
-    --maxw:992px;
+    /* dark is the default palette */
+    --paper:#15171B;
+    --paper-2:#1C2026;
+    --ink:#ECEAE4;
+    --ink-soft:#9FA3A6;
+    --rule:#30343A;
+    --blue:#7C9CE0;
+    --blue-pale:#1E2638;
+    --maxw:860px;
+  }
+  [data-theme="light"]{
+    --paper:#FAF9F6;
+    --paper-2:#F2F0EA;
+    --ink:#17191B;
+    --ink-soft:#5B5F5C;
+    --rule:#D6D3C9;
+    --blue:#1E3F8F;
+    --blue-pale:#E9EDF6;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
     margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Sora', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
     font-weight:400;
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
-  body::before{
-    content:"";
-    position:fixed; inset:0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size:64px 64px;
-    opacity:0.12;
-    pointer-events:none;
-    z-index:0;
-  }
-  a{color:inherit;text-decoration:none;}
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px; position:relative; z-index:1;}
-  code, .mono{font-family:'JetBrains Mono', monospace;}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
 
-  /* NAV */
-  .nav{
-    position:sticky; top:0; z-index:10;
-    background:rgba(11,15,13,0.85);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--border);
+  /* subtle graph-paper ground, like an engineering notebook */
+  .ground{
+    position:fixed; inset:0; z-index:-1;
+    background-image:
+      linear-gradient(var(--rule) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+    background-size:28px 28px;
+    opacity:0.35;
   }
-  .nav .wrap{
-    display:flex; align-items:center; justify-content:space-between;
-    padding-top:16px; padding-bottom:16px;
+
+  /* TITLE BLOCK (header, modeled on a drawing title block) */
+  .titleblock{border-bottom:1px solid var(--ink);}
+  .tb-grid{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    padding:22px 0 18px; gap:24px;
   }
-  .logo{
-    font-family:'JetBrains Mono', monospace;
-    font-weight:600;
-    font-size:15px;
-    color:var(--green);
-    border:1px solid var(--green-dim);
-    border-radius:8px;
+  .tb-mark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px; font-weight:600;
+    border:1px solid var(--ink);
     padding:6px 10px;
     letter-spacing:0.5px;
   }
-  .nav-links{display:flex; gap:28px;}
-  .nav-links a{
-    font-size:14px;
-    color:var(--text-dim);
-    transition:color .15s ease;
+  .tb-nav{display:flex; gap:22px; padding-top:9px;}
+  .tb-nav a{font-size:14px; color:var(--ink-soft); border-bottom:1px solid transparent;}
+  .tb-nav a:hover{color:var(--ink); border-color:var(--ink);}
+  .tb-controls{display:flex; align-items:center; gap:14px;}
+  .theme-toggle{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:none;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
+    padding:7px 11px;
+    cursor:pointer;
   }
-  .nav-links a:hover{color:var(--text);}
-  .nav-icons{display:flex; gap:14px;}
-  .nav-icons a{
-    width:32px;height:32px;
-    display:flex;align-items:center;justify-content:center;
-    border:1px solid var(--border);
-    border-radius:8px;
-    color:var(--text-dim);
-    transition:border-color .15s ease, color .15s ease;
+  .theme-toggle:hover{border-color:var(--ink); color:var(--ink);}
+  .tb-icons{display:flex; gap:8px;}
+  .icon-btn{
+    width:32px; height:32px;
+    display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--rule);
+    color:var(--ink-soft);
   }
-  .nav-icons a:hover{border-color:var(--green-dim); color:var(--green);}
-  .nav-icons svg{width:16px;height:16px;}
-  @media (max-width:720px){
-    .nav-links{display:none;}
+  .icon-btn svg{width:15px; height:15px;}
+  .icon-btn:hover{background:var(--ink); border-color:var(--ink); color:var(--paper);}
+  @media (max-width:760px){
+    .tb-nav{display:none;}
+  }
+  @media (max-width:480px){
+    .tb-grid{flex-direction:column; align-items:flex-start; gap:14px;}
   }
 
   /* HERO */
   .hero{
-    max-width:var(--maxw);
-    margin:0 auto;
-    padding:72px 24px 56px;
+    max-width:1160px;
+    width:100%;
     display:grid;
-    grid-template-columns:1.1fr 0.9fr;
-    gap:48px;
+    grid-template-columns:minmax(0, 1fr) minmax(0, .95fr);
     align-items:center;
-    position:relative; z-index:1;
+    gap:36px;
+    padding:56px 24px 50px;
+  }
+  .doc-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--blue);
+    margin:0 0 14px;
   }
   .hero h1{
-    font-size:44px;
-    font-weight:700;
-    margin:0 0 10px;
-    letter-spacing:-0.5px;
+    font-size:38px;
+    font-weight:600;
+    margin:0 0 8px;
+    letter-spacing:-0.3px;
   }
   .hero .role{
-    color:var(--green);
-    font-size:19px;
+    font-size:17px;
     font-weight:500;
-    margin:0 0 20px;
-    max-width:36ch;
+    color:var(--ink);
+    margin:0 0 16px;
+    max-width:32ch;
   }
   .hero .desc{
-    color:var(--text-dim);
-    font-size:15.5px;
+    color:var(--ink-soft);
+    font-size:15px;
     max-width:46ch;
-    margin:0 0 28px;
+    margin:0 0 26px;
   }
   .cta-row{display:flex; gap:12px; flex-wrap:wrap;}
   .btn{
     display:inline-block;
-    padding:11px 20px;
-    border-radius:10px;
-    font-size:14.5px;
-    font-weight:600;
-    font-family:'Sora',sans-serif;
+    padding:10px 18px;
+    font-size:14px;
+    font-weight:500;
+    border:1px solid var(--ink);
   }
-  .btn-primary{background:var(--green); color:#08130D;}
-  .btn-primary:hover{background:var(--green-dim);}
-  .btn-ghost{border:1px solid var(--border); color:var(--text);}
-  .btn-ghost:hover{border-color:var(--green-dim); color:var(--green);}
+  .btn-solid{background:var(--ink); color:var(--paper);}
+  .btn-solid:hover{background:var(--blue); border-color:var(--blue);}
+  .btn-outline{color:var(--ink);}
+  .btn-outline:hover{background:var(--ink); color:var(--paper);}
 
-  /* TERMINAL */
-  .terminal{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 0 0 1px rgba(0,0,0,0.2);
+  .figure{min-width:0; padding:0;}
+  .hero-diagram{border:1px solid var(--rule); border-radius:5px; background:linear-gradient(145deg,var(--paper-2),var(--paper)); padding:28px 28px 20px;}
+  .hero-diagram svg{width:100%; height:auto; display:block; max-width:720px; margin:0 auto;}
+  .hero-diagram svg.diagram-narrow{display:none;}
+  @media (max-width:680px){
+    .hero-diagram{padding:20px 16px 16px;}
+    .hero-diagram svg.diagram-wide{display:none;}
+    .hero-diagram svg.diagram-narrow{display:block; max-width:360px;}
   }
-  .terminal-bar{
-    display:flex; align-items:center; gap:7px;
-    padding:10px 14px;
-    border-bottom:1px solid var(--border);
-    background:var(--surface-2);
+  .diagram-caption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin:16px 0 0;
+    text-align:center;
   }
-  .dot{width:10px;height:10px;border-radius:50%;}
-  .dot.r{background:#e05a4e;} .dot.y{background:#e0b04e;} .dot.g{background:#3ec97a;}
-  .terminal-title{
-    margin-left:8px; font-family:'JetBrains Mono',monospace;
-    font-size:12px; color:var(--text-dim);
+  .diag-line{
+    stroke:var(--ink-soft);
+    stroke-width:1.7;
+    fill:none;
+    stroke-linecap:round;
+    stroke-dasharray:320;
+    stroke-dashoffset:320;
+    animation:draw 1s ease forwards;
   }
-  .terminal-body{
-    padding:20px 18px;
-    font-family:'JetBrains Mono', monospace;
-    font-size:13px;
-    min-height:190px;
-    color:#B9C4BE;
-  }
-  .terminal-body .line{margin:0 0 6px; white-space:pre-wrap;}
-  .terminal-body .ok{color:var(--green);}
-  .terminal-body .amber{color:var(--amber);}
-  .cursor{display:inline-block; width:7px; height:14px; background:var(--green); margin-left:2px; vertical-align:middle; animation:blink 1s step-end infinite;}
-  @keyframes blink{50%{opacity:0;}}
+  .diag-line.b{stroke:var(--blue); animation-delay:.3s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+  .diag-node rect{fill:var(--paper-2); stroke:var(--ink-soft); stroke-width:1.5;}
+  .diag-node.hub rect{fill:var(--blue-pale); stroke:var(--blue); stroke-width:1.8;}
+  .diag-node text{font-family:'IBM Plex Mono', monospace;}
+  .diag-node .t1{font-size:15px; fill:var(--ink); font-weight:600;}
+  .diag-node .t2{font-size:11.5px; fill:var(--ink-soft);}
+  .diag-node .icon{stroke:var(--blue); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+  .diag-node .icon-dot{fill:var(--blue); stroke:none;}
+  .diag-node.hub .icon{stroke:var(--blue);}
+  .diag-node.hub .icon-dot{fill:var(--blue);}
+  .diag-label-bg{fill:var(--paper-2); stroke:var(--rule); stroke-width:.7;}
+  .diag-label{font-family:'IBM Plex Mono', monospace; font-size:11.5px; fill:var(--blue); text-anchor:middle;}
+  .arrowhead-ink{fill:var(--ink);}
+  .arrowhead-blue{fill:var(--blue);}
 
-  @media (max-width:840px){
-    .hero{grid-template-columns:1fr; padding-top:48px;}
-    .hero h1{font-size:34px;}
+  @media (max-width:800px){
+    .hero{padding-top:40px;}
+    .hero h1{font-size:30px;}
+  }
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr; gap:32px;}
   }
 
   /* SECTIONS */
-  section{padding:64px 0; position:relative; z-index:1;}
-  section h2{
-    font-size:26px;
-    font-weight:700;
-    margin:0 0 32px;
+  section.section{
+    border-top:1px solid var(--rule);
+    padding:46px 0;
   }
-  .section-border{border-top:1px solid var(--border);}
+  section.section h2{
+    font-size:23px;
+    font-weight:600;
+    margin:0 0 28px;
+  }
 
   /* ABOUT */
-  .about-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:40px;
-  }
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:36px;}
   .about-grid h3{
-    font-size:13px;
-    text-transform:none;
-    color:var(--text-dim);
-    font-weight:600;
-    margin:0 0 12px;
-    font-family:'JetBrains Mono',monospace;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin:0 0 10px;
   }
-  .edu-item{margin-bottom:6px;}
   .edu-item .school{font-weight:600; font-size:16px;}
-  .edu-item .degree{color:var(--text-dim); font-size:14.5px;}
-  .edu-item .dates{color:var(--text-dim); font-size:13px; font-family:'JetBrains Mono',monospace; margin-top:4px;}
-  .about-grid p{color:var(--text-dim); font-size:15px; margin:0;}
+  .edu-item .degree{color:var(--ink-soft); font-size:14.5px; margin-top:2px;}
+  .edu-item .dates{color:var(--ink-soft); font-size:12.5px; font-family:'IBM Plex Mono', monospace; margin-top:6px;}
+  .about-grid p{color:var(--ink-soft); font-size:15px; margin:0;}
   @media (max-width:720px){.about-grid{grid-template-columns:1fr;}}
 
-  /* PROJECTS */
-  .project-grid{display:flex; flex-direction:column; gap:16px;}
-  .project-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-left:3px solid var(--accent, var(--green));
-    border-radius:10px;
-    padding:24px;
-  }
-  .project-head{
-    display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
-    margin-bottom:10px;
-  }
-  .project-icon{
-    width:38px;height:38px;
-    border-radius:10px;
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    display:flex;align-items:center;justify-content:center;
-    font-family:'JetBrains Mono',monospace;
-    font-weight:600; font-size:13px;
-    color:var(--accent, var(--green));
-    flex-shrink:0;
-  }
-  .project-title-row{display:flex; align-items:center; gap:12px; flex:1;}
-  .project-title{font-size:17px; font-weight:600;}
-  .project-link{
-    font-family:'JetBrains Mono',monospace;
+  /* PROJECTS (document entries, not cards) */
+  .entry{padding:26px 0; border-top:1px solid var(--rule);}
+  .entry:first-child{border-top:none; padding-top:0;}
+  .entry-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:8px;}
+  .entry-id{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--blue); font-weight:600;}
+  .entry-head h3{font-size:18px; font-weight:600; margin:0; flex:1; min-width:200px;}
+  .entry-link{
+    font-family:'IBM Plex Mono', monospace;
     font-size:12.5px;
-    color:var(--text-dim);
-    border:1px solid var(--border);
-    border-radius:7px;
-    padding:6px 10px;
-    white-space:nowrap;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--rule);
   }
-  .project-link:hover{color:var(--accent, var(--green)); border-color:var(--accent, var(--green));}
-  .chip-row{display:flex; flex-wrap:wrap; gap:7px; margin:12px 0 14px;}
-  .chip{
-    font-family:'JetBrains Mono',monospace;
+  .entry-link:hover{color:var(--blue); border-color:var(--blue);}
+  .entry-stack{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+  .entry ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
+  .entry li{margin-bottom:5px;}
+
+  /* SKILLS as spec table */
+  .spec-table{width:100%; border-collapse:collapse; font-size:14.5px;}
+  .spec-table th{
+    text-align:left;
+    font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
-    color:var(--text-dim);
-    border:1px solid var(--border);
-    border-radius:6px;
-    padding:3px 8px;
+    font-weight:500;
+    color:var(--ink-soft);
+    padding:0 0 10px;
+    border-bottom:1px solid var(--ink);
   }
-  .project-card ul{margin:0; padding-left:18px; color:var(--text-dim); font-size:14.5px;}
-  .project-card li{margin-bottom:5px;}
+  .spec-table td{
+    padding:12px 0;
+    border-bottom:1px solid var(--rule);
+    vertical-align:top;
+  }
+  .spec-table td:first-child{width:36%; font-weight:500; color:var(--ink); padding-right:16px;}
+  .spec-table td:last-child{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink-soft);}
+  .coursework{margin-top:18px; font-size:14px; color:var(--ink-soft);}
+  .coursework span{color:var(--ink); font-family:'IBM Plex Mono', monospace; font-size:13px;}
 
-  /* SKILLS */
-  .gradle-block{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:22px 24px;
-    font-family:'JetBrains Mono',monospace;
-    font-size:13.3px;
-    line-height:1.85;
-    overflow-x:auto;
-    color:#C7D1CB;
+  /* RECORD (achievements) */
+  .record-row{
+    display:grid; grid-template-columns:110px 1fr;
+    gap:18px; padding:14px 0; border-top:1px solid var(--rule);
   }
-  .gradle-block .kw{color:var(--amber);}
-  .gradle-block .fn{color:var(--green);}
-  .gradle-block .str{color:#9ECBFF;}
-  .gradle-block .cmt{color:var(--text-dim); font-style:italic;}
-  .coursework{
-    margin-top:18px;
-    font-size:14px;
-    color:var(--text-dim);
+  .record-row:first-child{border-top:none;}
+  .record-figure{font-family:'IBM Plex Mono', monospace; font-size:17px; font-weight:600; color:var(--blue);}
+  .record-desc{font-size:14.5px; color:var(--ink-soft); padding-top:2px;}
+  .record-desc a{color:var(--ink); border-bottom:1px solid var(--blue);}
+  .record-desc a:hover{color:var(--blue);}
+  @media (max-width:560px){
+    .record-row{grid-template-columns:1fr;}
   }
-  .coursework span{color:var(--text);}
 
-  /* ACHIEVEMENTS */
-  .stat-row{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
-  .stat-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:22px;
-  }
-  .stat-num{font-size:26px; font-weight:700; color:var(--green); margin-bottom:6px;}
-  .stat-label{font-size:13.5px; color:var(--text-dim);}
-  @media (max-width:720px){.stat-row{grid-template-columns:1fr;}}
-
-  .involve{
-    margin-top:32px;
-    border-top:1px solid var(--border);
-    padding-top:32px;
-  }
+  .involve{margin-top:30px; border-top:1px solid var(--ink); padding-top:24px;}
   .involve h3{font-size:16px; font-weight:600; margin:0 0 4px;}
-  .involve .org{color:var(--green); font-size:13.5px; font-family:'JetBrains Mono',monospace; margin-bottom:12px;}
-  .involve ul{margin:0; padding-left:18px; color:var(--text-dim); font-size:14.5px;}
+  .involve .org{color:var(--blue); font-size:13px; font-family:'IBM Plex Mono', monospace; margin-bottom:12px;}
+  .involve ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
   .involve li{margin-bottom:5px;}
 
   /* FOOTER */
-  footer{
-    text-align:left;
-    padding:64px 0 48px;
-  }
-  footer h2{font-size:28px; margin-bottom:12px;}
-  footer p{color:var(--text-dim); font-size:15px; margin:0 0 24px; max-width:44ch;}
+  footer.section{padding-bottom:56px;}
+  footer p{color:var(--ink-soft); font-size:15px; margin:0 0 22px; max-width:44ch;}
   .footer-email{
-    font-family:'JetBrains Mono',monospace;
-    font-size:16px;
-    color:var(--green);
-    border-bottom:1px solid var(--green-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:17px;
+    color:var(--ink);
+    border-bottom:1px solid var(--blue);
     padding-bottom:2px;
   }
-  .footer-socials{display:flex; gap:20px; margin-top:28px; flex-wrap:wrap;}
-  .footer-socials a{font-size:13.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
-  .footer-socials a:hover{color:var(--green);}
+  .footer-email:hover{color:var(--blue);}
+  .footer-links{display:flex; gap:20px; margin-top:26px; flex-wrap:wrap;}
+  .footer-links a{font-size:13px; color:var(--ink-soft); font-family:'IBM Plex Mono', monospace; border-bottom:1px solid var(--rule);}
+  .footer-links a:hover{color:var(--blue); border-color:var(--blue);}
   .foot-note{
-    margin-top:48px;
-    padding-top:24px;
-    border-top:1px solid var(--border);
-    font-size:12.5px;
-    color:var(--text-dim);
-    font-family:'JetBrains Mono',monospace;
+    margin-top:44px; padding-top:20px; border-top:1px solid var(--rule);
+    font-size:12px; color:var(--ink-soft); font-family:'IBM Plex Mono', monospace;
   }
 </style>
 </head>
 <body>
+<div class="ground"></div>
 
-<nav class="nav">
-  <div class="wrap">
-    <div class="logo">KR</div>
-    <div class="nav-links">
-      <a href="#about">About</a>
+<header class="titleblock">
+  <div class="wrap tb-grid">
+    <div class="tb-mark">K.R.</div>
+    <nav class="tb-nav">
+      <a href="#about">Profile</a>
       <a href="#projects">Projects</a>
-      <a href="#skills">Skills</a>
-      <a href="#achievements">Achievements</a>
+      <a href="#skills">Capabilities</a>
+      <a href="#record">Record</a>
       <a href="#contact">Contact</a>
-    </div>
-    <div class="nav-icons">
-      <a href="mailto:krishna.raipuria2006@gmail.com" aria-label="Email" title="Email">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l9 6 9-6M3 6h18v12H3z"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/krishnaraipuria/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V23h-4V8zM8.5 8h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.9c0-1.65-.03-3.77-2.3-3.77-2.3 0-2.66 1.8-2.66 3.65V23h-4V8z"/></svg>
-      </a>
-      <a href="https://github.com/krishnaraipuria" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.5c0 4.86 3.15 8.98 7.52 10.44.55.1.75-.24.75-.53 0-.26-.01-1.13-.02-2.05-3.06.66-3.71-1.3-3.71-1.3-.5-1.27-1.22-1.6-1.22-1.6-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.43 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.22-2.58 5.15-5.03 5.42.39.34.74 1.02.74 2.05 0 1.48-.01 2.67-.01 3.03 0 .29.2.64.76.53A10.52 10.52 0 0 0 23 11.5C23 5.24 18.27.5 12 .5z"/></svg>
-      </a>
-      <a href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener" aria-label="LeetCode" title="LeetCode">
-        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path d="M13.483 0a1.2 1.2 0 0 0-.85.352L3.35 9.635a4.8 4.8 0 0 0 0 6.788l4.227 4.227a4.8 4.8 0 0 0 6.788 0l2.984-2.984a1.2 1.2 0 1 0-1.697-1.697l-2.984 2.984a2.4 2.4 0 0 1-3.394 0l-4.227-4.227a2.4 2.4 0 0 1 0-3.394l9.283-9.283A1.2 1.2 0 0 0 13.483 0z"/>
-  <path d="M8.4 12.6a1.2 1.2 0 0 0 1.2 1.2h10.8a1.2 1.2 0 1 0 0-2.4H9.6a1.2 1.2 0 0 0-1.2 1.2z"/>
-</svg>
-      </a>
+    </nav>
+    <div class="tb-controls">
+      <button id="themeToggle" class="theme-toggle mono" aria-label="Switch color theme">[ light mode ]</button>
+      <div class="tb-icons">
+        <a class="icon-btn" href="mailto:krishna.raipuria2006@gmail.com" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6l9 6 9-6M3 6h18v12H3z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://www.linkedin.com/in/krishnaraipuria/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V23h-4V8zM8.5 8h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.9c0-1.65-.03-3.77-2.3-3.77-2.3 0-2.66 1.8-2.66 3.65V23h-4V8z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://github.com/krishnaraipuria" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.98 5.24.98 11.5c0 4.86 3.15 8.98 7.52 10.44.55.1.75-.24.75-.53 0-.26-.01-1.13-.02-2.05-3.06.66-3.71-1.3-3.71-1.3-.5-1.27-1.22-1.6-1.22-1.6-1-.68.07-.67.07-.67 1.1.08 1.68 1.13 1.68 1.13.98 1.68 2.57 1.2 3.2.92.1-.71.38-1.2.7-1.48-2.44-.28-5.01-1.22-5.01-5.43 0-1.2.43-2.18 1.13-2.95-.11-.28-.49-1.4.11-2.92 0 0 .92-.3 3.02 1.13a10.5 10.5 0 0 1 5.5 0c2.1-1.43 3.02-1.13 3.02-1.13.6 1.52.22 2.64.11 2.92.7.77 1.13 1.75 1.13 2.95 0 4.22-2.58 5.15-5.03 5.42.39.34.74 1.02.74 2.05 0 1.48-.01 2.67-.01 3.03 0 .29.2.64.76.53A10.52 10.52 0 0 0 23 11.5C23 5.24 18.27.5 12 .5z"/></svg>
+        </a>
+        <a class="icon-btn" href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener" aria-label="LeetCode" title="LeetCode">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z"/></svg>
+        </a>
+      </div>
     </div>
   </div>
-</nav>
+</header>
 
-<div class="hero">
+<div class="wrap hero">
   <div class="hero-text">
+    <p class="doc-tag">Portfolio — rev. 2026.10</p>
     <h1>Krishna Raipuria</h1>
-    <p class="role">Android developer building AI-powered mobile apps</p>
-    <p class="desc">I build Android apps with Kotlin and Jetpack Compose, then wire AI agents into them with LangChain and LangGraph — from expense tracking to autonomous research.</p>
+    <p class="role">Backend &amp; Android developer building AI-powered systems</p>
+    <p class="desc">I build REST APIs with Node.js and Express, Android apps with Kotlin and Jetpack Compose, and connect both to AI agents built with LangChain and LangGraph.</p>
     <div class="cta-row">
-      <a class="btn btn-primary" href="#projects">View projects</a>
-      <a class="btn btn-ghost" href="mailto:krishna.raipuria2006@gmail.com">Say hello</a>
+      <a class="btn btn-solid" href="#projects">View projects</a>
+      <a class="btn btn-outline" href="mailto:krishna.raipuria2006@gmail.com">Get in touch</a>
     </div>
   </div>
-  <div class="terminal">
-    <div class="terminal-bar">
-      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-      <span class="terminal-title">~/portfolio — zsh</span>
-    </div>
-    <div class="terminal-body" id="termBody"></div>
+
+  <div class="figure">
+  <p class="doc-tag">Fig. 1 — system architecture</p>
+  <div class="hero-diagram">
+    <svg class="diagram-wide" viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="arrowhead-ink"/>
+        </marker>
+        <marker id="arrowB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="arrowhead-blue"/>
+        </marker>
+      </defs>
+
+      <!-- connectors -->
+      <path class="diag-line" d="M210,90 L256,90" marker-end="url(#arrow)"/>
+      <path class="diag-line" d="M486,90 L532,90" marker-end="url(#arrow)"/>
+      <path class="diag-line b" d="M371,130 L371,230" marker-end="url(#arrowB)"/>
+
+      <!-- connector labels -->
+      <rect class="diag-label-bg" x="206" y="68" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="233" y="80">https</text>
+      <rect class="diag-label-bg" x="482" y="68" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="509" y="80">query</text>
+      <rect class="diag-label-bg" x="390" y="172" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="417" y="184">invoke</text>
+
+      <!-- Android client -->
+      <g class="diag-node">
+        <rect x="20" y="50" width="190" height="80" rx="5"/>
+        <g class="icon" transform="translate(115,64)">
+          <rect x="-7" y="0" width="14" height="22" rx="2"/>
+          <circle class="icon-dot" cx="0" cy="17" r="1.2"/>
+        </g>
+        <text x="115" y="100" text-anchor="middle" class="t1">Android client</text>
+        <text x="115" y="116" text-anchor="middle" class="t2">Kotlin / Jetpack Compose</text>
+      </g>
+
+      <!-- REST API (hub) -->
+      <g class="diag-node hub">
+        <rect x="256" y="50" width="230" height="80" rx="5"/>
+        <g class="icon" transform="translate(371,64)">
+          <rect x="-9" y="0" width="18" height="8" rx="1.5"/>
+          <rect x="-9" y="11" width="18" height="8" rx="1.5"/>
+          <circle class="icon-dot" cx="-5" cy="4" r="1"/>
+          <circle class="icon-dot" cx="-5" cy="15" r="1"/>
+        </g>
+        <text x="371" y="100" text-anchor="middle" class="t1">REST API</text>
+        <text x="371" y="116" text-anchor="middle" class="t2">Node.js / Express</text>
+      </g>
+
+      <!-- MongoDB -->
+      <g class="diag-node">
+        <rect x="532" y="50" width="208" height="80" rx="5"/>
+        <g class="icon" transform="translate(636,64)">
+          <ellipse cx="0" cy="3" rx="9" ry="3"/>
+          <path d="M-9,3 V15 A9,3 0 0 0 9,15 V3"/>
+        </g>
+        <text x="636" y="100" text-anchor="middle" class="t1">MongoDB</text>
+        <text x="636" y="116" text-anchor="middle" class="t2">Mongoose</text>
+      </g>
+
+      <!-- AI agent -->
+      <g class="diag-node">
+        <rect x="256" y="230" width="230" height="80" rx="5"/>
+        <g class="icon" transform="translate(371,245)">
+          <rect x="-8" y="2" width="16" height="16" rx="1.5"/>
+          <circle class="icon-dot" cx="0" cy="10" r="2"/>
+          <line x1="-8" y1="6" x2="-12" y2="6"/>
+          <line x1="-8" y1="14" x2="-12" y2="14"/>
+          <line x1="8" y1="6" x2="12" y2="6"/>
+          <line x1="8" y1="14" x2="12" y2="14"/>
+          <line x1="-4" y1="2" x2="-4" y2="-2"/>
+          <line x1="4" y1="2" x2="4" y2="-2"/>
+        </g>
+        <text x="371" y="280" text-anchor="middle" class="t1">AI agent</text>
+        <text x="371" y="296" text-anchor="middle" class="t2">LangGraph / LLM</text>
+      </g>
+    </svg>
+
+    <svg class="diagram-narrow" viewBox="0 0 320 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arrow-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="arrowhead-ink"/>
+        </marker>
+        <marker id="arrowB-n" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" class="arrowhead-blue"/>
+        </marker>
+      </defs>
+
+      <!-- connectors -->
+      <path class="diag-line" d="M160,92 L160,130" marker-end="url(#arrow-n)"/>
+      <path class="diag-line" d="M85,202 L85,250" marker-end="url(#arrow-n)"/>
+      <path class="diag-line b" d="M235,202 L235,250" marker-end="url(#arrowB-n)"/>
+
+      <!-- connector labels -->
+      <rect class="diag-label-bg" x="188" y="102" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="215" y="114">https</text>
+      <rect class="diag-label-bg" x="20" y="218" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="47" y="230">query</text>
+      <rect class="diag-label-bg" x="246" y="218" width="54" height="16" rx="3"/>
+      <text class="diag-label" x="273" y="230">invoke</text>
+
+      <!-- Android client -->
+      <g class="diag-node">
+        <rect x="20" y="20" width="280" height="70" rx="5"/>
+        <g class="icon" transform="translate(160,32)">
+          <rect x="-7" y="0" width="14" height="22" rx="2"/>
+          <circle class="icon-dot" cx="0" cy="17" r="1.2"/>
+        </g>
+        <text x="160" y="68" text-anchor="middle" class="t1">Android client</text>
+        <text x="160" y="83" text-anchor="middle" class="t2">Kotlin / Jetpack Compose</text>
+      </g>
+
+      <!-- REST API (hub) -->
+      <g class="diag-node hub">
+        <rect x="20" y="130" width="280" height="70" rx="5"/>
+        <g class="icon" transform="translate(160,142)">
+          <rect x="-9" y="0" width="18" height="8" rx="1.5"/>
+          <rect x="-9" y="11" width="18" height="8" rx="1.5"/>
+          <circle class="icon-dot" cx="-5" cy="4" r="1"/>
+          <circle class="icon-dot" cx="-5" cy="15" r="1"/>
+        </g>
+        <text x="160" y="178" text-anchor="middle" class="t1">REST API</text>
+        <text x="160" y="193" text-anchor="middle" class="t2">Node.js / Express</text>
+      </g>
+
+      <!-- MongoDB -->
+      <g class="diag-node">
+        <rect x="20" y="250" width="130" height="90" rx="5"/>
+        <g class="icon" transform="translate(85,262)">
+          <ellipse cx="0" cy="3" rx="8" ry="2.6"/>
+          <path d="M-8,3 V14 A8,2.6 0 0 0 8,14 V3"/>
+        </g>
+        <text x="85" y="300" text-anchor="middle" class="t1" style="font-size:12.5px">MongoDB</text>
+        <text x="85" y="314" text-anchor="middle" class="t2" style="font-size:10px">Mongoose</text>
+      </g>
+
+      <!-- AI agent -->
+      <g class="diag-node">
+        <rect x="170" y="250" width="130" height="90" rx="5"/>
+        <g class="icon" transform="translate(235,263)">
+          <rect x="-7" y="1" width="14" height="14" rx="1.3"/>
+          <circle class="icon-dot" cx="0" cy="8" r="1.7"/>
+          <line x1="-7" y1="5" x2="-10.5" y2="5"/>
+          <line x1="-7" y1="11" x2="-10.5" y2="11"/>
+          <line x1="7" y1="5" x2="10.5" y2="5"/>
+          <line x1="7" y1="11" x2="10.5" y2="11"/>
+        </g>
+        <text x="235" y="300" text-anchor="middle" class="t1" style="font-size:12.5px">AI agent</text>
+        <text x="235" y="314" text-anchor="middle" class="t2" style="font-size:9.5px">LangGraph / LLM</text>
+      </g>
+    </svg>
+  </div>
+  <p class="diagram-caption">typical request path across the stack — Android client to REST API to MongoDB, with an AI agent invoked for assistant queries</p>
   </div>
 </div>
 
-<section id="about" class="section-border">
-  <div class="wrap">
-    <h2>About</h2>
-    <div class="about-grid">
-      <div>
-        <h3>education</h3>
-        <div class="edu-item">
-          <div class="school">Nitte Meenakshi Institute of Technology</div>
-          <div class="degree">B.E. in Electronics and Communication Engineering</div>
-          <div class="dates">Sep 2024 – Present</div>
-        </div>
-      </div>
-      <div>
-        <h3>currently</h3>
-        <p> Building Android apps with Kotlin and Jetpack Compose, while increasingly exploring AI agents using LangChain and LangGraph. Interested in creating practical applications that combine mobile development with AI. </p>
+<section id="about" class="section wrap">
+  <p class="doc-tag">§1 — Profile</p>
+  <h2>Profile</h2>
+  <div class="about-grid">
+    <div>
+      <h3>education</h3>
+      <div class="edu-item">
+        <div class="school">Nitte Meenakshi Institute of Technology</div>
+        <div class="degree">B.E. in Electronics and Communication Engineering</div>
+        <div class="dates">Sep 2024 – Present</div>
       </div>
     </div>
+    <div>
+      <h3>currently</h3>
+      <p>Building backend applications with Node.js and Express, along with Android apps using Kotlin and Jetpack Compose, while increasingly exploring AI agents using LangChain and LangGraph. Interested in creating practical applications that combine backend, mobile development, and AI.</p>
   </div>
 </section>
 
-<section id="projects" class="section-border">
-  <div class="wrap">
-    <h2>Projects</h2>
-    <div class="project-grid">
+<section id="projects" class="section wrap">
+  <p class="doc-tag">§2 — Projects</p>
+  <h2>Projects</h2>
 
-      <div class="project-card" style="--accent:var(--green)">
-        <div class="project-head">
-          <div class="project-title-row">
-            <div class="project-icon">EB</div>
-            <div class="project-title">Easy Budget — AI-Powered Expense Manager</div>
-          </div>
-          <a class="project-link" href="https://github.com/krishnaraipuria/EasyBudget" target="_blank" rel="noopener">github ↗</a>
-        </div>
-        <div class="chip-row">
-          <span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Room</span><span class="chip">MVVM</span><span class="chip">LangGraph</span><span class="chip">LLM</span>
-        </div>
-        <ul>
-          <li>Expense management app for tracking and organizing daily spending by date and category through a clean, responsive interface.</li>
-          <li>Room Database with MVVM architecture for persistent offline storage and reliable retrieval of expense records.</li>
-          <li>AI financial assistant built with LangGraph and an LLM to analyze spending patterns and answer natural-language questions about expenses.</li>
-        </ul>
-      </div>
-
-      <div class="project-card" style="--accent:var(--amber)">
-        <div class="project-head">
-          <div class="project-title-row">
-            <div class="project-icon">BA</div>
-            <div class="project-title">Blog Research &amp; Writing Agent</div>
-          </div>
-          <a class="project-link" href="https://github.com/krishnaraipuria/Multi-Agent-Blog-Research-Generation-System" target="_blank" rel="noopener">github ↗</a>
-        </div>
-        <div class="chip-row">
-          <span class="chip">Python</span><span class="chip">LangChain</span><span class="chip">LangGraph</span><span class="chip">Tavily</span><span class="chip">Streamlit</span>
-        </div>
-        <ul>
-          <li>Planning-based AI agent that autonomously researches a topic and writes a structured blog article through multi-step workflows.</li>
-          <li>Orchestrator-worker architecture in LangGraph handling planning, routing, research, worker, and reducer stages.</li>
-          <li>LangChain tools plus Tavily for web research, with parallel execution combining results into the final draft.</li>
-        </ul>
-      </div>
-
-      <div class="project-card" style="--accent:var(--green)">
-        <div class="project-head">
-          <div class="project-title-row">
-            <div class="project-icon">CA</div>
-            <div class="project-title">Real-Time Chat &amp; Calling App</div>
-          </div>
-          <a class="project-link" href="https://github.com/krishnaraipuria/ChatApp" target="_blank" rel="noopener">github ↗</a>
-        </div>
-        <div class="chip-row">
-          <span class="chip">Kotlin</span><span class="chip">Jetpack Compose</span><span class="chip">Firebase Firestore</span><span class="chip">WebRTC</span>
-        </div>
-        <ul>
-          <li>Real-time chat app with instant message sync and persistent conversation history via Firebase Firestore.</li>
-          <li>Responsive Jetpack Compose UI covering messaging, chat history, and everyday interaction flows.</li>
-          <li>WebRTC with Firebase-based signaling for real-time peer-to-peer audio and video calls.</li>
-        </ul>
-      </div>
-
+  <article class="entry">
+    <div class="entry-head">
+      <span class="entry-id">2.1</span>
+      <h3>Video Backend Platform</h3>
+      <a class="entry-link" href="https://github.com/krishnaraipuria/video-platform-backend" target="_blank" rel="noopener">[ repository ]</a>
     </div>
+    <p class="entry-stack">Node.js, Express.js, MongoDB, Mongoose, JWT, Cloudinary</p>
+    <ul>
+      <li>Modular REST API built with Node.js and Express.js, with structured controllers, routes, middleware, and utilities.</li>
+      <li>JWT access/refresh token authentication with protected routes, secure login/logout, password management, and user profile operations.</li>
+      <li>Video and media upload workflows using Multer and Cloudinary for video files, thumbnails, avatars, and cover images.</li>
+      <li>MongoDB/Mongoose data models and aggregation workflows for videos, subscriptions, playlists, comments, likes, tweets, users, and watch history.</li>
+    </ul>
+  </article>
+
+  <article class="entry">
+    <div class="entry-head">
+      <span class="entry-id">2.2</span>
+      <h3>Easy Budget — AI-Powered Expense Manager</h3>
+      <a class="entry-link" href="https://github.com/krishnaraipuria/EasyBudget" target="_blank" rel="noopener">[ repository ]</a>
+    </div>
+    <p class="entry-stack">Kotlin, Jetpack Compose, Room, MVVM, LangGraph, LLM</p>
+    <ul>
+      <li>Expense management app for tracking and organizing daily spending by date and category through a clean, responsive interface.</li>
+      <li>Room Database with MVVM architecture for persistent offline storage and reliable retrieval of expense records.</li>
+      <li>AI financial assistant built with LangGraph and an LLM to analyze spending patterns and answer natural-language questions about expenses.</li>
+    </ul>
+  </article>
+
+  <article class="entry">
+    <div class="entry-head">
+      <span class="entry-id">2.3</span>
+      <h3>Blog Research &amp; Writing Agent</h3>
+      <a class="entry-link" href="https://github.com/krishnaraipuria/Multi-Agent-Blog-Research-Generation-System" target="_blank" rel="noopener">[ repository ]</a>
+    </div>
+    <p class="entry-stack">Python, LangChain, LangGraph, Tavily, Streamlit</p>
+    <ul>
+      <li>Planning-based AI agent that autonomously researches a topic and writes a structured blog article through multi-step workflows.</li>
+      <li>Orchestrator-worker architecture in LangGraph handling planning, routing, research, worker, and reducer stages.</li>
+      <li>LangChain tools plus Tavily for web research, with parallel execution combining results into the final draft.</li>
+    </ul>
+  </article>
+</section>
+
+<section id="skills" class="section wrap">
+  <p class="doc-tag">§3 — Capabilities</p>
+  <h2>Capabilities</h2>
+  <table class="spec-table">
+    <tr><th>Parameter</th><th>Value</th></tr>
+    <tr><td>Programming languages</td><td>C++, C, JavaScript, Python</td></tr>
+    <tr><td>Backend development</td><td>Node.js, Express.js, RESTful APIs, Mongoose</td></tr>
+    <tr><td>Mobile development</td><td>Kotlin, Jetpack Compose, Android Architecture Components</td></tr>
+    <tr><td>AI &amp; agentic AI</td><td>LangChain, LangGraph, LLM APIs, Prompt Engineering, AI Agents</td></tr>
+    <tr><td>Databases</td><td>MongoDB, MySQL, Room Database (SQLite)</td></tr>
+    <tr><td>Developer tools</td><td>Git, GitHub, VS Code, Android Studio, Docker, GCP</td></tr>
+  </table>
+  <p class="coursework">Coursework — <span>Data Structures and Algorithms, OOPs, OS, DBMS, Computer Networks</span></p>
+</section>
+
+<section id="record" class="section wrap">
+  <p class="doc-tag">§4 — Record</p>
+  <h2>Record</h2>
+
+  <div class="record-row">
+    <div class="record-figure">Top 20</div>
+    <div class="record-desc">teams in the Internal Smart India Hackathon 2025 at NMIT, earning selection for the next round.</div>
+  </div>
+  <div class="record-row">
+    <div class="record-figure">Top 500</div>
+    <div class="record-desc">of 8,000+ registrations selected for RIFT '26 Bengaluru, one of the country's largest hackathons.</div>
+  </div>
+  <div class="record-row">
+    <div class="record-figure">450+</div>
+    <div class="record-desc">problems solved on <a href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener">LeetCode</a>, demonstrating strong problem-solving and algorithmic skills.</div>
+  </div>
+
+  <div class="involve">
+    <h3>Technical Team Member</h3>
+    <div class="org">Google Developer Groups (GDG) On Campus, NMIT</div>
+    <ul>
+      <li>Helped organize technical workshops, developer events, and hands-on sessions for the campus developer community.</li>
+      <li>Built and supported technical projects and demos used during developer events.</li>
+      <li>Coordinated technical resources and event logistics for workshops and community events.</li>
+    </ul>
   </div>
 </section>
 
-<section id="skills" class="section-border">
-  <div class="wrap">
-    <h2>Skills</h2>
-    <pre class="gradle-block"><span class="kw">dependencies</span> {
-    <span class="cmt">// Languages</span>
-    <span class="fn">implementation</span>(<span class="str">"kotlin"</span>, <span class="str">"c++"</span>, <span class="str">"c"</span>, <span class="str">"python"</span>)
-
-    <span class="cmt">// AI & agentic AI</span>
-    <span class="fn">implementation</span>(<span class="str">"langchain"</span>, <span class="str">"langgraph"</span>, <span class="str">"llm-apis"</span>, <span class="str">"prompt-engineering"</span>)
-
-    <span class="cmt">// Mobile development</span>
-    <span class="fn">implementation</span>(<span class="str">"jetpack-compose"</span>, <span class="str">"android-architecture-components"</span>)
-
-    <span class="cmt">// Databases</span>
-    <span class="fn">implementation</span>(<span class="str">"mysql"</span>, <span class="str">"room-sqlite"</span>, <span class="str">"firebase-firestore"</span>)
-
-    <span class="cmt">// Developer tools</span>
-    <span class="fn">implementation</span>(<span class="str">"git"</span>, <span class="str">"github"</span>, <span class="str">"android-studio"</span>, <span class="str">"docker"</span>, <span class="str">"gcp"</span>)
-}</pre>
-    <p class="coursework">Coursework: <span>Data Structures and Algorithms, Object-Oriented Programming, Operating Systems, DBMS, Computer Networks</span></p>
+<footer id="contact" class="section wrap">
+  <p class="doc-tag">§5 — Contact</p>
+  <h2>Get in touch</h2>
+  <p>Open to backend, Android, and AI-agent development opportunities, internships, and interesting side projects.</p>
+  <a class="footer-email" href="mailto:krishna.raipuria2006@gmail.com">krishna.raipuria2006@gmail.com</a>
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/krishnaraipuria/" target="_blank" rel="noopener">linkedin.com/in/krishnaraipuria</a>
+    <a href="https://github.com/krishnaraipuria" target="_blank" rel="noopener">github.com/krishnaraipuria</a>
+    <a href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener">leetcode.com/u/krishnaraipuria</a>
   </div>
-</section>
-
-<section id="achievements" class="section-border">
-  <div class="wrap">
-    <h2>Achievements</h2>
-    <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-num">Top 20</div>
-        <div class="stat-label">teams in the Internal Smart India Hackathon 2025 at NMIT, earning selection for the next round</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">Top 500</div>
-        <div class="stat-label">of 8,000+ registrations selected for RIFT '26 Bengaluru, one of the country's largest hackathons</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">400+</div>
-        <div class="stat-label">problems solved on <a href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener" style="color:var(--green); border-bottom:1px solid var(--green-dim);">LeetCode</a></div>
-      </div>
-    </div>
-
-    <div class="involve">
-      <h3>Technical Team Member</h3>
-      <div class="org">Google Developer Groups (GDG) On Campus, NMIT</div>
-      <ul>
-        <li>Helped organize technical workshops, developer events, and hands-on sessions for the campus developer community.</li>
-        <li>Built and supported technical projects and demos used during developer events.</li>
-        <li>Coordinated technical resources and event logistics for workshops and community events.</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<footer id="contact" class="section-border">
-  <div class="wrap">
-    <h2>Let's build something</h2>
-    <p>Open to Android and AI-agent development opportunities, internships, and interesting side projects.</p>
-    <a class="footer-email" href="mailto:krishna.raipuria2006@gmail.com">krishna.raipuria2006@gmail.com</a>
-    <div class="footer-socials">
-      <a href="https://www.linkedin.com/in/krishnaraipuria/" target="_blank" rel="noopener">linkedin.com/in/krishnaraipuria</a>
-      <a href="https://github.com/krishnaraipuria" target="_blank" rel="noopener">github.com/krishnaraipuria</a>
-      <a href="https://leetcode.com/u/krishnaraipuria/" target="_blank" rel="noopener">leetcode.com/u/krishnaraipuria</a>
-    </div>
-    <div class="foot-note">© 2026 Krishna Raipuria — built with Kotlin habits and HTML.</div>
-  </div>
+  <div class="foot-note">© 2026 Krishna Raipuria.</div>
 </footer>
 
 <script>
-  const lines = [
-    { text: "> gradle launchProfile", cls: "" },
-    { text: "Launching Krishna Raipuria...", cls: "" },
-    { text: "✓ Android developer", cls: "ok" },
-    { text: "✓ Kotlin · Jetpack Compose", cls: "ok" },
-    { text: "✓ AI agents with LangGraph", cls: "amber" },
-    { text: "BUILD SUCCESSFUL in 0.4s", cls: "ok" },
-  ];
-  const body = document.getElementById('termBody');
-  let li = 0, ci = 0;
+  (function(){
+    var root = document.documentElement;
+    var btn = document.getElementById('themeToggle');
 
-  function typeLine(){
-    if(li >= lines.length){
-      const c = document.createElement('span');
-      c.className = 'cursor';
-      body.appendChild(c);
-      return;
-    }
-    const current = lines[li];
-    if(ci === 0){
-      const p = document.createElement('div');
-      p.className = 'line ' + current.cls;
-      p.id = 'l' + li;
-      body.appendChild(p);
-    }
-    const el = document.getElementById('l' + li);
-    if(ci <= current.text.length){
-      el.textContent = current.text.slice(0, ci);
-      ci++;
-      setTimeout(typeLine, 18);
-    } else {
-      li++; ci = 0;
-      setTimeout(typeLine, 220);
-    }
-  }
-  typeLine();
+    function isLight(){ return root.getAttribute('data-theme') === 'light'; }
+    function syncLabel(){ btn.textContent = isLight() ? '[ dark mode ]' : '[ light mode ]'; }
+
+    syncLabel();
+
+    btn.addEventListener('click', function(){
+      if(isLight()){
+        root.removeAttribute('data-theme');
+        try{ localStorage.setItem('kr-theme', 'dark'); }catch(e){}
+      } else {
+        root.setAttribute('data-theme', 'light');
+        try{ localStorage.setItem('kr-theme', 'light'); }catch(e){}
+      }
+      syncLabel();
+    });
+  })();
 </script>
 
 </body>
