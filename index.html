@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="dark light">
 <meta name="theme-color" content="#15171B">
-<title>Krishna Raipuria — Backend & Android Developer</title>
+<title>Krishna Raipuria</title>
+<link rel="icon" type="image/jpeg" href="./logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -63,7 +64,6 @@
     background-size:28px 28px;
     opacity:0.35;
   }
-
   /* TITLE BLOCK (header, modeled on a drawing title block) */
   .titleblock{border-bottom:1px solid var(--ink);}
   .tb-grid{
@@ -105,6 +105,7 @@
   }
   @media (max-width:480px){
     .tb-grid{flex-direction:column; align-items:flex-start; gap:14px;}
+    .tb-controls{width:100%; flex-wrap:wrap; gap:10px;}
   }
 
   /* HERO */
@@ -251,6 +252,32 @@
   }
   .entry ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:14.5px;}
   .entry li{margin-bottom:5px;}
+  .project-more{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:4px 0;
+    padding:18px 12px;
+    border-block:1px solid var(--rule);
+    text-align:center;
+  }
+  .project-more span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .project-more a{
+    color:var(--ink);
+    font-size:14px;
+    font-weight:600;
+    border-bottom:1px solid var(--ink);
+  }
+  .project-more a:hover{
+    color:var(--blue);
+    border-color:var(--blue);
+  }
 
   /* SKILLS as spec table */
   .spec-table{width:100%; border-collapse:collapse; font-size:14.5px;}
@@ -302,6 +329,9 @@
     color:var(--ink);
     border-bottom:1px solid var(--blue);
     padding-bottom:2px;
+  }
+  @media (max-width:480px){
+    .footer-email{overflow-wrap:anywhere;}
   }
   .footer-email:hover{color:var(--blue);}
   .footer-links{display:flex; gap:20px; margin-top:26px; flex-wrap:wrap;}
@@ -541,44 +571,36 @@
     <div class="entry-head">
       <span class="entry-id">2.1</span>
       <h3>Video Backend Platform</h3>
-      <a class="entry-link" href="https://github.com/krishnaraipuria/video-platform-backend" target="_blank" rel="noopener">[ repository ]</a>
+      <a class="entry-link" href="https://github.com/krishnaraipuria/video-platform-backend" target="_blank" rel="noopener">[ GitHub Repository ]</a>
     </div>
-    <p class="entry-stack">Node.js, Express.js, MongoDB, Mongoose, JWT, Cloudinary</p>
+    <p class="entry-stack">Node.js, Express.js, MongoDB, Mongoose, JWT, Multer, Cloudinary</p>
     <ul>
-      <li>Modular REST API built with Node.js and Express.js, with structured controllers, routes, middleware, and utilities.</li>
-      <li>JWT access/refresh token authentication with protected routes, secure login/logout, password management, and user profile operations.</li>
-      <li>Video and media upload workflows using Multer and Cloudinary for video files, thumbnails, avatars, and cover images.</li>
-      <li>MongoDB/Mongoose data models and aggregation workflows for videos, subscriptions, playlists, comments, likes, tweets, users, and watch history.</li>
+      <li><strong>Backend Architecture:</strong> Designed a modular REST API using Node.js and Express.js, organizing controllers, routes, middleware, models, and utilities for maintainable backend development.</li>
+      <li><strong>Authentication &amp; Security:</strong> Implemented JWT-based access and refresh token authentication, protected routes, registration, login/logout, password hashing with bcrypt, and user account management.</li>
+      <li><strong>Video &amp; Media Management:</strong> Developed video upload, publishing, visibility control, and deletion workflows using Multer and Cloudinary for video files, thumbnails, avatars, and cover images.</li>
+      <li><strong>Database &amp; Social Features:</strong> Built MongoDB/Mongoose data models and aggregation pipelines supporting <em>comments, likes, playlists, subscriptions, tweets, watch history, and creator dashboard analytics</em>.</li>
     </ul>
   </article>
 
   <article class="entry">
     <div class="entry-head">
       <span class="entry-id">2.2</span>
-      <h3>Easy Budget — AI-Powered Expense Manager</h3>
-      <a class="entry-link" href="https://github.com/krishnaraipuria/EasyBudget" target="_blank" rel="noopener">[ repository ]</a>
+      <h3>EasyBudget — AI-Powered Expense Manager</h3>
+      <a class="entry-link" href="https://github.com/krishnaraipuria/EasyBudget" target="_blank" rel="noopener">[ GitHub Repository ]</a>
     </div>
-    <p class="entry-stack">Kotlin, Jetpack Compose, Room, MVVM, LangGraph, LLM</p>
+    <p class="entry-stack"><strong>Kotlin, Jetpack Compose, Room, MVVM, FastAPI, LangGraph, Groq LLM</strong></p>
     <ul>
-      <li>Expense management app for tracking and organizing daily spending by date and category through a clean, responsive interface.</li>
-      <li>Room Database with MVVM architecture for persistent offline storage and reliable retrieval of expense records.</li>
-      <li>AI financial assistant built with LangGraph and an LLM to analyze spending patterns and answer natural-language questions about expenses.</li>
+      <li><strong>Android Development:</strong> Built an expense management app using Kotlin and Jetpack Compose to record, categorize, and track daily expenses through a responsive interface.</li>
+      <li><strong>Local Data &amp; Architecture:</strong> Implemented MVVM architecture with Room (SQLite), Repository patterns, and Kotlin Flow for persistent offline storage and reactive UI updates.</li>
+      <li><strong>AI Financial Assistant:</strong> Integrated a FastAPI backend with LangGraph and Groq LLMs to process natural-language questions and provide personalized insights into spending data.</li>
+      <li><strong>Privacy-First AI Integration:</strong> Designed an architecture that keeps financial records in the local database, enabling AI-generated SQL queries to run locally, with a SQLite-based fallback for supported queries when the AI backend is unavailable.</li>
     </ul>
   </article>
 
-  <article class="entry">
-    <div class="entry-head">
-      <span class="entry-id">2.3</span>
-      <h3>Blog Research &amp; Writing Agent</h3>
-      <a class="entry-link" href="https://github.com/krishnaraipuria/Multi-Agent-Blog-Research-Generation-System" target="_blank" rel="noopener">[ repository ]</a>
-    </div>
-    <p class="entry-stack">Python, LangChain, LangGraph, Tavily, Streamlit</p>
-    <ul>
-      <li>Planning-based AI agent that autonomously researches a topic and writes a structured blog article through multi-step workflows.</li>
-      <li>Orchestrator-worker architecture in LangGraph handling planning, routing, research, worker, and reducer stages.</li>
-      <li>LangChain tools plus Tavily for web research, with parallel execution combining results into the final draft.</li>
-    </ul>
-  </article>
+  <div class="project-more">
+    <span>There’s more in the workshop</span>
+    <a href="https://github.com/krishnaraipuria" target="_blank" rel="noopener">Explore all projects on GitHub &rarr;</a>
+  </div>
 </section>
 
 <section id="skills" class="section wrap">
